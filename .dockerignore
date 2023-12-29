@@ -1,0 +1,11 @@
+*
+!Dockerfile.*
+!requirements.txt
+!features
+!zapp-entrypoint.sh
+!zapp-entrypoint-remote.sh
+!version.py
+!run.py
+!repositories
+!certs
+**/__pycache__

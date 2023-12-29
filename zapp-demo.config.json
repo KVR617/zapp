@@ -1,0 +1,14 @@
+{
+  "PROJECT": "ZAPP",
+  "TEST_STAND": "https://zapp.example.com",
+  "ENV": "QA",
+  "DEBUG": "True",
+  "tags": ["@first_page,@second_page" ,"@demo","~@wip"],
+  "LOCAL_SCREENSHOTS": "False",
+  "ZAPP_DEMO_PAGE": "https://zapp.example.com/demo",
+  "pay_acquiring_number": "71018658089",
+  "link_number": "71010101019",
+  "login_number": "71004326444",
+  "login_number_text": "+7 (100) 432-64-44",
+  "cas_number": "362907"
+}

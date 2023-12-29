@@ -1,0 +1,32 @@
+FROM python:3.9-alpine as build
+
+COPY requirements.txt .
+
+RUN apk add --update wget curl zip tar sed gcc postgresql-dev musl-dev jpeg-dev zlib-dev
+RUN mkdir -p /drivers /wheel \
+    && pip wheel -w /wheel -r requirements.txt
+
+
+FROM python:3.9-alpine
+
+COPY --from=build /wheel /wheel
+
+ENV LANG ru_RU.UTF-8
+ENV LC_ALL ru_RU.UTF-8
+
+ARG TG_BOT_TOKEN
+ARG TG_CHAT_ID
+ENV TG_BOT_TOKEN=$TG_BOT_TOKEN
+ENV TG_CHAT_ID=$TG_CHAT_ID
+
+WORKDIR /zapp
+COPY requirements.txt .
+
+RUN apk --update --no-cache add git sed openssh libpq zlib libjpeg \
+    && pip3 install -f /wheel -r requirements.txt \
+    && apk del git openssh sed git \
+    && rm -rf /root/.cache
+
+COPY . .
+
+ENTRYPOINT ["./zapp-entrypoint-remote.sh"]
