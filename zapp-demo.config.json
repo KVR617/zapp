@@ -1,6 +1,7 @@
 {
   "PROJECT": "ZAPP",
   "TEST_STAND": "https://zapp.example.com",
+  "BROWSER": "Chrome",
   "ENV": "QA",
   "DEBUG": "True",
   "tags": ["@first_page,@second_page" ,"@demo","~@wip"],

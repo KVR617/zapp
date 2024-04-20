@@ -6,7 +6,7 @@ from selenium.common.exceptions import SessionNotCreatedException, WebDriverExce
 from abc import ABC, abstractmethod
 from collections import namedtuple
 
-from features.core.install_driver import install_geckodriver
+from features.core.install_driver import install_geckodriver, install_chromedriver
 from features.core.constants import BROWSER_AWARE_MESSAGE
 from features.core.settings import (
     VIDEO,
@@ -175,15 +175,14 @@ class LocalChromeBrowser(AbstractChromiumBrowser):
             caps.update(CHROME_LOGGING_PREFS)
 
         try:
-            driver = webdriver.Chrome(desired_capabilities=caps)
-
-        except SessionNotCreatedException as e:
-            log.debug('Версия chromedriver не соответствует версии Chrome')
-
-        except Exception:
-            log.critical('Произошла ошибка. Попробуйте обновить Chrome до последней версии и распаковать chromedriver соответствующей версии в bin')
-
-        return driver
+            return webdriver.Chrome(desired_capabilities=caps)
+        
+        except SessionNotCreatedException:
+            log.error('Браузер Chrome не найден. Установите или обновите до последней версии и повторите попытку.')
+        
+        except WebDriverException:
+            log.info(f'Установлен chromedriver: {install_chromedriver()}')
+            return webdriver.Chrome(desired_capabilities=caps)
 
 
 class AbstractSberBrowser(AbstractChromiumBrowser):
@@ -239,12 +238,13 @@ class LocalFirefoxBrowser(AbstractFirefoxBrowser):
 
         try:
             return webdriver.Firefox(firefox_profile=profile)
-
+        
+        except SessionNotCreatedException:
+            log.error('Браузер Firefox не найден. Установите или обновите до последней версии и повторите попытку.')
+        
         except WebDriverException:
             log.info(f'Установлен geckodriver: {install_geckodriver()}')
             return webdriver.Firefox(firefox_profile=profile)
-        except Exception:
-            log.critical('Произошла ошибка. Попробуйте обновить Firefox до последней версии и распаковать geckodriver соответствующей версии в bin')
 
 
 class RemoteFirefoxBrowser(AbstractFirefoxBrowser):
